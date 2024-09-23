@@ -27,13 +27,32 @@ public class HashGenerator {
         }
     }
 
+    public static String encode2(String data) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(data.getBytes("UTF-8"));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString().toUpperCase();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 
 
     public static void main(String[] args) {
         String apiSecret = "F83D4537A69B3A67D4A27C3B88E7296C6A4D4E2E764E9F9BB8824CC34E28A1B2";
         String data = "campo_a_cifrar";
-        System.out.println("Hash SHA-256 sin apiSecret: " + encode(data));
+        System.out.println("Hash SHA-256 con libreria: " + encode(data));
 
-        System.out.println("Hash SHA-256 con apiSecret: " + encodeWithKey(apiSecret,data));
+       // System.out.println("Hash SHA-256 con apiSecret: " + encodeWithKey(apiSecret,data));
+
+        System.out.println("Hash SHA-256 sin libreria: " + encode2(data));
     }
 }
